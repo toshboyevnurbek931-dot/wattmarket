@@ -20,12 +20,10 @@ const app = express();
 const PORT = Number(process.env.PORT || 3000);
 const root = path.join(__dirname, "uploads");
 
-// Kerakli papkalarni avtomatik yaratish
 for (const d of ["products", "receipts", "ads"]) {
   fs.mkdirSync(path.join(root, d), { recursive: true });
 }
 
-// Xavfsizlik va sozlamalar (CSP muammosini oldini olish uchun helmet yumshatildi)
 app.use(
   helmet({
     contentSecurityPolicy: false,
@@ -40,17 +38,12 @@ app.use("/uploads", express.static(root, { maxAge: "7d" }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/api", rateLimit({ windowMs: 15 * 60 * 1000, max: 500 }));
 
-// SQLite ma'lumotlar bazasiga ulanish
 const dbFile = path.join(__dirname, "wattmarket.db");
 const db = new sqlite3.Database(dbFile, (err) => {
-  if (err) {
-    console.error("Bazaga ulanishda xato:", err.message);
-  } else {
-    console.log("SQLite ma'lumotlar bazasiga muvaffaqiyatli ulandi.");
-  }
+  if (err) console.error("Bazaga ulanishda xato:", err.message);
+  else console.log("SQLite ma'lumotlar bazasiga muvaffaqiyatli ulandi.");
 });
 
-// Jadval va jadvallar strukturasini yaratish
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, category TEXT NOT NULL, description TEXT DEFAULT '', price INTEGER NOT NULL, old_price INTEGER DEFAULT 0, discount INTEGER DEFAULT 0, image_url TEXT DEFAULT '', video_url TEXT DEFAULT '', is_featured INTEGER DEFAULT 0, stock INTEGER DEFAULT 0, status TEXT DEFAULT 'active', created_at TEXT DEFAULT CURRENT_TIMESTAMP)`);
   db.run(`CREATE TABLE IF NOT EXISTS comments(id INTEGER PRIMARY KEY AUTOINCREMENT, product_id INTEGER NOT NULL, name TEXT NOT NULL, rating INTEGER NOT NULL, comment TEXT NOT NULL, status TEXT DEFAULT 'pending', created_at TEXT DEFAULT CURRENT_TIMESTAMP)`);
@@ -60,7 +53,6 @@ db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY, value TEXT NOT NULL)`);
 });
 
-// Multer fayl yuklash sozlamalari
 function storage(folder) {
   return multer.diskStorage({
     destination: (q, f, cb) => cb(null, path.join(root, folder)),
@@ -72,24 +64,6 @@ const image = multer({ storage: storage("products"), limits: { fileSize: 8 * 102
 const receipt = multer({ storage: storage("receipts"), limits: { fileSize: 8 * 1024 * 1024 } });
 const adimage = multer({ storage: storage("ads"), limits: { fileSize: 8 * 1024 * 1024 } });
 
-// Admin autentifikatsiya middleware'lari
-function auth(req, res, next) {
-  const h = req.headers.authorization || "";
-  if (!h.startsWith("Bearer ")) return res.status(401).json({ message: "Admin token kerak" });
-  try {
-    req.user = jwt.verify(h.slice(7), process.env.JWT_SECRET || "wattmarket_secret_key");
-    next();
-  } catch {
-    res.status(401).json({ message: "Admin sessiyasi eskirgan" });
-  }
-}
-
-function admin(req, res, next) {
-  if (req.user?.role !== "admin") return res.status(403).json({ message: "Ruxsat yo'q" });
-  next();
-}
-
-// API yo'llari (Routes)
 app.get("/api/public/config", (q, res) => {
   res.json({
     storeName: process.env.STORE_NAME || "WattMarket",
@@ -124,32 +98,51 @@ app.get("/api/products", (req, res) => {
   });
 });
 
+// An'anaviy login endpointi
 app.post("/api/admin/login", (req, res) => {
   const u = String(req.body.username || "");
   const p = String(req.body.password || "");
   
-  // Standart login va parol: admin / admin123 (Render'da .env orqali o'zgartirishingiz mumkin)
-  const adminUser = process.env.ADMIN_USERNAME || "NurbekDev";
-  const adminPass = process.env.ADMIN_PASSWORD || "06160530";
+  const adminUser = "NurbekDev";
+  const adminPass = "06160530";
 
   if (u !== adminUser || p !== adminPass) {
     return res.status(401).json({ message: "Login yoki parol noto'g'ri" });
   }
-  const token = jwt.sign({ role: "admin", username: u }, process.env.JWT_SECRET || "wattmarket_secret_key", { expiresIn: "8h" });
+  const token = jwt.sign({ role: "admin", username: u }, process.env.JWT_SECRET || "wattmarket_secret_key", { expiresIn: "7d" });
   res.json({ token });
 });
 
-// Asosiy sahifani yo'naltirish
+// TELEFON UCHUN MAXSUS LINK: /admin-fast (bositrasiz va avtomatik kiradi)
+app.get("/admin-fast", (req, res) => {
+  const token = jwt.sign({ role: "admin", username: "NurbekDev" }, process.env.JWT_SECRET || "wattmarket_secret_key", { expiresIn: "7d" });
+  res.send(`
+    <!doctype html>
+    <html lang="uz">
+    <head><meta charset="utf-8"><title>Admin kirish...</title></head>
+    <body style="background:#0f172a;color:#fff;display:grid;place-items:center;height:100vh;font-family:sans-serif">
+      <div style="text-align:center">
+        <h2>Admin panelga ulanmoqda...</h2>
+        <p>Iltimos, bir oz kuting.</p>
+      </div>
+      <script>
+        localStorage.setItem('wm_admin_token', '${token}');
+        sessionStorage.setItem('wm_admin_token', '${token}');
+        window.location.href = '/';
+      </script>
+    </body>
+    </html>
+  `);
+});
+
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Xatoliklarni boshqarish
 app.use((e, req, res, next) => {
   res.status(400).json({ message: e.message || "Server xatosi" });
 });
 
-// Serverni ishga tushirish
 app.listen(PORT, () => {
   console.log(`WattMarket serveri ishga tushdi: http://localhost:${PORT}`);
 });

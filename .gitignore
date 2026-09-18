@@ -1,0 +1,4 @@
+node_modules/
+wattmarket.db
+.env
+uploads/

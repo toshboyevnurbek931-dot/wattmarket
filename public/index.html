@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#07111f">
+<meta name="description" content="WattMarket — zamonaviy elektronika va kundalik mahsulotlar onlayn bozori.">
+<title>WattMarket — Zamonaviy onlayn market</title>
+
+<style>
+:root{
+  --bg:#f5f7fb; --card:#fff; --text:#172033; --muted:#697386;
+  --line:#e6eaf0; --blue:#1769ff; --blue2:#0b4dcc;
+  --cyan:#00c7d9; --green:#15b86a; --orange:#ff8a00; --red:#ef3d4e;
+  --dark:#07111f; --dark2:#0d1b2e; --shadow:0 10px 30px rgba(18,38,63,.08);
+  --radius:16px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+
+.topbar{background:var(--dark);color:#dce7f7;font-size:12px}
+.topbar .wrap,.header .wrap,.nav .wrap,.content{max-width:1440px;margin:auto;padding:0 22px}
+.topbar .wrap{height:34px;display:flex;align-items:center;justify-content:space-between}
+.top-links{display:flex;gap:20px;align-items:center}
+.header{background:#fff;border-bottom:1px solid var(--line)}
+.header .wrap{height:76px;display:flex;align-items:center;gap:22px}
+.logo{font-size:27px;font-weight:900;letter-spacing:-1.4px;color:var(--dark)}
+.logo span{color:var(--blue)}
+.logo small{display:block;font-size:9px;letter-spacing:2px;color:var(--muted);font-weight:700;margin-top:-3px}
+.search{flex:1;display:flex;height:46px;border:2px solid var(--blue);border-radius:12px;overflow:hidden;background:#fff}
+.search select{border:0;border-right:1px solid var(--line);padding:0 12px;background:#f8faff;color:var(--muted);outline:0}
+.search input{flex:1;border:0;outline:0;padding:0 15px;font-size:14px}
+.search button{width:54px;border:0;background:var(--blue);color:white;font-size:18px}
+.header-actions{display:flex;gap:8px}
+.icon-btn{position:relative;border:0;background:#f4f7fb;border-radius:11px;padding:11px 13px;color:#24334a;min-width:52px}
+.icon-btn:hover{background:#eaf1ff;color:var(--blue)}
+.badge{position:absolute;top:3px;right:3px;background:var(--red);color:#fff;font-size:9px;min-width:17px;height:17px;border-radius:20px;display:grid;place-items:center;font-weight:800}
+
+.nav{background:#fff;border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:25px;height:48px;overflow:auto;white-space:nowrap}
+.nav a{font-size:13px;color:#465268;font-weight:600}
+.nav a:hover{color:var(--blue)}
+.catalog-btn{background:var(--blue);color:white!important;padding:9px 15px;border-radius:9px}
+.sale{color:var(--red)!important}
+
+.hero{max-width:1440px;margin:18px auto 0;padding:0 22px}
+.hero-grid{display:grid;grid-template-columns:1.65fr .75fr;gap:14px}
+.hero-main{min-height:330px;border-radius:20px;overflow:hidden;position:relative;background:
+linear-gradient(90deg,rgba(3,15,34,.94) 0%,rgba(3,15,34,.73) 40%,rgba(3,15,34,.1) 100%),
+linear-gradient(120deg,#06172d,#0b3b73 55%,#0a1527);color:white;padding:44px}
+.hero-main:after{content:"";position:absolute;right:-80px;top:-80px;width:420px;height:420px;border-radius:50%;border:70px solid rgba(0,199,217,.08)}
+.hero-main h1{font-size:48px;line-height:1.03;margin:0 0 12px;max-width:650px;letter-spacing:-2px}
+.hero-main h1 b{color:#42e4ff}
+.hero-main p{font-size:16px;color:#d6e3f6;max-width:540px;line-height:1.55}
+.hero-buttons{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+.btn{border:0;border-radius:11px;padding:12px 17px;font-weight:800}
+.btn-primary{background:var(--blue);color:white}
+.btn-primary:hover{background:var(--blue2)}
+.btn-light{background:white;color:var(--dark)}
+.btn-outline{background:transparent;border:1px solid #d9e1ef;color:var(--text)}
+.btn-danger{background:#fff0f2;color:var(--red)}
+.btn-success{background:#eafbf3;color:#087944}
+.hero-side{display:grid;grid-template-rows:1fr 1fr;gap:14px}
+.promo{border-radius:18px;padding:25px;color:white;position:relative;overflow:hidden}
+.promo h3{margin:0 0 8px;font-size:25px}
+.promo p{margin:0;color:#dbe8f6;font-size:13px}
+.promo.one{background:linear-gradient(135deg,#102f57,#0067c9)}
+.promo.two{background:linear-gradient(135deg,#0a514c,#12a879)}
+.promo .big{font-size:38px;font-weight:900;display:block;margin-top:15px}
+
+.quick{max-width:1440px;margin:14px auto;padding:0 22px}
+.quick-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.quick-card{background:white;border:1px solid var(--line);border-radius:12px;padding:13px;display:flex;align-items:center;gap:11px;font-size:12px;font-weight:700}
+.quick-card .qicon{width:35px;height:35px;border-radius:10px;background:#edf4ff;display:grid;place-items:center;font-size:18px}
+
+.content{padding-top:24px;padding-bottom:70px}
+.section-head{display:flex;align-items:end;justify-content:space-between;margin:25px 0 14px}
+.section-head h2{margin:0;font-size:22px}
+.section-head p{margin:5px 0 0;color:var(--muted);font-size:12px}
+.section-head .right{display:flex;gap:8px}
+.select{border:1px solid var(--line);background:#fff;padding:9px 12px;border-radius:9px;color:#536075}
+
+.categories{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}
+.cat{background:white;border:1px solid var(--line);border-radius:14px;padding:15px 8px;text-align:center;transition:.2s}
+.cat:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.cat .emoji{font-size:30px}
+.cat strong{display:block;font-size:12px;margin-top:8px}
+
+.products{display:grid;grid-template-columns:repeat(5,1fr);gap:13px}
+.product{background:#fff;border:1px solid var(--line);border-radius:15px;overflow:hidden;position:relative;transition:.2s}
+.product:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.product-img{height:190px;background:#f1f4f8;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.product-img img{width:100%;height:100%;object-fit:cover}
+.product-img .placeholder{font-size:55px}
+.discount{position:absolute;left:10px;top:10px;background:var(--red);color:white;padding:5px 7px;border-radius:6px;font-size:10px;font-weight:900}
+.fav{position:absolute;right:9px;top:8px;width:31px;height:31px;border:0;border-radius:50%;background:#fff;box-shadow:0 4px 12px #0001}
+.product-body{padding:12px}
+.product-title{font-size:13px;line-height:1.35;min-height:36px;font-weight:700}
+.rating{font-size:11px;color:#f5a400;margin:7px 0}
+.rating span{color:#8792a5}
+.price{font-size:19px;font-weight:900}
+.old-price{text-decoration:line-through;color:#9ba4b2;font-size:11px;margin-left:5px}
+.installment{font-size:10px;color:var(--green);margin:5px 0 10px}
+.add{width:100%;border:0;border-radius:9px;padding:10px;background:#edf4ff;color:var(--blue);font-weight:900}
+.add:hover{background:var(--blue);color:white}
+
+.deals{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:12px}
+.deal{border-radius:15px;padding:23px;color:white;min-height:155px;overflow:hidden;position:relative}
+.deal h3{margin:0 0 8px;font-size:21px}.deal p{font-size:12px;color:#e5efff}
+.deal .code{display:inline-block;margin-top:12px;padding:8px 12px;background:#fff;color:#10213a;border-radius:8px;font-weight:900}
+.d1{background:linear-gradient(135deg,#17284c,#1769ff)}
+.d2{background:linear-gradient(135deg,#553100,#ff8a00)}
+.d3{background:linear-gradient(135deg,#07483c,#10ad79)}
+
+.ai-card{margin-top:25px;background:linear-gradient(135deg,#07111f,#0c2541);color:#fff;border-radius:18px;padding:22px;display:grid;grid-template-columns:1fr 1.6fr;gap:20px}
+.ai-card h2{margin:0 0 8px}.ai-card p{color:#b9c9dc;font-size:13px;line-height:1.5}
+.ai-points{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.ai-point{background:#ffffff0b;border:1px solid #ffffff12;border-radius:12px;padding:14px}
+.ai-point b{display:block;color:#53e6ff;margin-bottom:5px}.ai-point span{font-size:11px;color:#c6d3e4}
+
+footer{background:#06101e;color:#aebdd1;padding:45px 22px}
+.footer-grid{max-width:1440px;margin:auto;display:grid;grid-template-columns:2fr repeat(4,1fr);gap:30px}
+footer h3,footer h4{color:white;margin-top:0} footer p,footer a{font-size:12px;line-height:1.8}
+.footer-bottom{max-width:1440px;margin:25px auto 0;border-top:1px solid #ffffff12;padding-top:18px;font-size:11px;display:flex;justify-content:space-between}
+
+.overlay{position:fixed;inset:0;background:rgba(3,10,20,.65);backdrop-filter:blur(5px);z-index:100;display:none;align-items:center;justify-content:center;padding:18px}
+.overlay.open{display:flex}
+.modal{background:#fff;width:min(720px,100%);max-height:92vh;overflow:auto;border-radius:20px;box-shadow:0 30px 100px #0005}
+.modal-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.modal-head h2{margin:0;font-size:19px}
+.close{border:0;background:#f0f3f8;width:34px;height:34px;border-radius:50%}
+.modal-body{padding:20px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}
+.field label{font-size:11px;font-weight:800;color:#566277}
+.field input,.field select,.field textarea{border:1px solid #dce2eb;border-radius:9px;padding:11px;outline:0}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #1769ff15}
+.modal-foot{padding:15px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:9px}
+
+.cart-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.cart-thumb{width:70px;height:70px;border-radius:10px;background:#f1f4f8;display:grid;place-items:center;font-size:28px;overflow:hidden}
+.cart-thumb img{width:100%;height:100%;object-fit:cover}
+.cart-info{flex:1}.cart-info b{font-size:13px}.qty{display:flex;gap:7px;align-items:center;margin-top:8px}
+.qty button{border:1px solid var(--line);background:white;border-radius:6px;width:26px;height:26px}
+.cart-summary{margin-top:15px;background:#f7f9fc;border-radius:12px;padding:15px}
+.row{display:flex;justify-content:space-between;margin:8px 0;font-size:13px}.total{font-size:19px;font-weight:900;border-top:1px solid var(--line);padding-top:12px}
+
+.tabs{display:flex;gap:6px;margin-bottom:15px}.tab{border:0;background:#f1f4f8;padding:9px 12px;border-radius:8px;font-weight:700;font-size:12px}.tab.active{background:var(--blue);color:#fff}
+.admin-note{background:#fff8e8;border:1px solid #ffe0a6;padding:11px;border-radius:10px;font-size:11px;color:#805500;margin-bottom:12px}
+
+.chat-launch{position:fixed;right:22px;bottom:22px;width:58px;height:58px;border:0;border-radius:50%;background:linear-gradient(135deg,var(--blue),#00b9d1);color:#fff;font-size:25px;box-shadow:0 12px 30px #1769ff55;z-index:80}
+.chat{position:fixed;right:22px;bottom:90px;width:350px;max-width:calc(100vw - 30px);height:490px;background:#fff;border-radius:18px;box-shadow:0 20px 60px #0004;z-index:80;display:none;overflow:hidden}
+.chat.open{display:flex;flex-direction:column}
+.chat-head{background:var(--dark);color:white;padding:14px;display:flex;justify-content:space-between}
+.chat-head small{color:#8eeaff;display:block;margin-top:3px}
+.chat-body{flex:1;padding:14px;overflow:auto;background:#f5f8fc}
+.msg{max-width:84%;padding:9px 11px;border-radius:12px;margin:7px 0;font-size:12px;line-height:1.4}
+.bot{background:#fff;border:1px solid var(--line)}.user{background:var(--blue);color:white;margin-left:auto}
+.chat-input{display:flex;padding:9px;border-top:1px solid var(--line);gap:7px}.chat-input input{flex:1;border:1px solid var(--line);border-radius:9px;padding:9px;outline:0}.chat-input button{border:0;background:var(--blue);color:#fff;border-radius:9px;width:42px}
+
+.toast{position:fixed;right:22px;top:95px;background:#07111f;color:white;padding:12px 16px;border-radius:10px;z-index:200;display:none;font-size:12px;box-shadow:var(--shadow)}
+.toast.show{display:block;animation:fade 3s forwards}
+@keyframes fade{0%,75%{opacity:1}100%{opacity:0}}
+
+.admin-products{display:grid;gap:9px}.admin-row{border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;justify-content:space-between;align-items:center}
+.hidden-admin{display:none}
+
+@media(max-width:1050px){
+  .products{grid-template-columns:repeat(4,1fr)}
+  .categories{grid-template-columns:repeat(4,1fr)}
+  .hero-grid{grid-template-columns:1fr}.hero-side{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .quick-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:760px){
+  .top-links{display:none}.header .wrap{height:auto;padding-top:12px;padding-bottom:12px;flex-wrap:wrap}
+  .search{order:3;flex-basis:100%}.header-actions{margin-left:auto}
+  .logo{font-size:23px}.hero-main{padding:28px;min-height:300px}.hero-main h1{font-size:34px}
+  .hero-side{grid-template-columns:1fr}.quick-grid{grid-template-columns:repeat(2,1fr)}
+  .products{grid-template-columns:repeat(2,1fr)}.categories{grid-template-columns:repeat(4,1fr)}
+  .product-img{height:160px}.ai-card{grid-template-columns:1fr}.ai-points{grid-template-columns:1fr}
+  .deals{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}
+  .field.full{grid-column:auto}.footer-bottom{display:block}.footer-bottom div{margin:5px 0}
+}
+</style>
+</head>
+
+<body>
+<div class="topbar">
+  <div class="wrap">
+    <div>⚡ WattMarket — elektronika, texnika va kundalik mahsulotlar</div>
+    <div class="top-links"><span>Yetkazib berish</span><span>Yordam</span><span>Buyurtmani kuzatish</span><span>UZ 🇺🇿</span></div>
+  </div>
+</div>
+
+<header class="header">
+  <div class="wrap">
+    <a class="logo" href="#" onclick="goHome();return false">Watt<span>Market</span><small>SMART SHOPPING PLATFORM</small></a>
+    <div class="search">
+      <select id="searchCategory">
+        <option value="">Barcha bo'limlar</option>
+        <option>Smartfonlar</option><option>Kompyuter</option><option>Audio</option><option>Maishiy texnika</option>
+        <option>Aksessuarlar</option><option>Uy uchun</option>
+      </select>
+      <input id="searchInput" placeholder="Mahsulot, brend yoki modelni qidiring...">
+      <button onclick="renderProducts()">⌕</button>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" onclick="openModal('accountModal')" title="Akkount">👤</button>
+      <button class="icon-btn" onclick="openModal('cartModal')" title="Savat">🛒<i id="cartBadge" class="badge">0</i></button>
+    </div>
+  </div>
+</header>
+
+<nav class="nav">
+  <div class="wrap">
+    <a href="#categories" class="catalog-btn">☰ Katalog</a>
+    <a href="#products">Smartfonlar</a><a href="#products">Noutbuklar</a><a href="#products">Kompyuterlar</a>
+    <a href="#products">TV & Audio</a><a href="#products">Aksessuarlar</a><a href="#products">Uy texnikasi</a>
+    <a href="#deals" class="sale">🔥 Aksiya</a><a href="#ai">AI yordamchi</a><a href="#contact">Aloqa</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-main">
+      <div style="font-size:12px;color:#5de7ff;font-weight:900;letter-spacing:2px">WATTMARKET ONLINE</div>
+      <h1>Texnologiyani <b>aqlli narxda</b> tanlang.</h1>
+      <p>Elektronika, kompyuter, smartfon, aksessuar va uy texnikasi. Qulay buyurtma, karta orqali to'lov va pochta orqali yetkazib berish.</p>
+      <div class="hero-buttons">
+        <button class="btn btn-primary" onclick="document.getElementById('products').scrollIntoView()">Xaridni boshlash →</button>
+        <button class="btn btn-light" onclick="openModal('deliveryModal')">Yetkazib berish shartlari</button>
+      </div>
+    </div>
+    <div class="hero-side">
+      <div class="promo one"><h3>Hafta taklifi</h3><p>Tanlangan elektronika mahsulotlariga maxsus chegirmalar.</p><span class="big">−50%</span></div>
+      <div class="promo two"><h3>Pochta yetkazib berish</h3><p>Manzilingizni kiriting — buyurtma sizga pochta orqali yuboriladi.</p><span class="big">24/7</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="quick">
+  <div class="quick-grid">
+    <div class="quick-card"><div class="qicon">🚚</div><div>Barcha hududlarga<br>pochta orqali</div></div>
+    <div class="quick-card"><div class="qicon">💳</div><div>Karta orqali<br>onlayn to'lov</div></div>
+    <div class="quick-card"><div class="qicon">🛡️</div><div>Xavfsiz buyurtma<br>va aloqa</div></div>
+    <div class="quick-card"><div class="qicon">🏷️</div><div>Aksiya va<br>chegirmalar</div></div>
+    <div class="quick-card"><div class="qicon">🤖</div><div>AI tanlov<br>yordamchisi</div></div>
+  </div>
+</div>
+
+<main class="content">
+  <section id="categories">
+    <div class="section-head"><div><h2>Bo'limlar</h2><p>Kerakli mahsulot yo'nalishini tanlang</p></div></div>
+    <div class="categories">
+      <a class="cat" href="#products" onclick="filterCategory('Smartfonlar')"><div class="emoji">📱</div><strong>Smartfonlar</strong></a>
+      <a class="cat" href="#products" onclick="filterCategory('Kompyuter')"><div class="emoji">💻</div><strong>Kompyuter</strong></a>
+      <a class="cat" href="#products" onclick="filterCategory('Audio')"><div class="emoji">🎧</div><strong>Audio</strong></a>
+      <a class="cat" href="#products" onclick="filterCategory('TV')"><div class="emoji">📺</div><strong>TV</strong></a>
+      <a class="cat" href="#products" onclick="filterCategory('Aksessuarlar')"><div class="emoji">⌨️</div><strong>Aksessuarlar</strong></a>
+      <a class="cat" href="#products" onclick="filterCategory('Uy texnikasi')"><div class="emoji">🏠</div><strong>Uy texnikasi</strong></a>
+      <a class="cat" href="#products" onclick="filterCategory('Gaming')"><div class="emoji">🎮</div><strong>Gaming</strong></a>
+      <a class="cat" href="#products" onclick="filterCategory('Elektronika')"><div class="emoji">⚡</div><strong>Elektronika</strong></a>
+    </div>
+  </section>
+
+  <section id="products">
+    <div class="section-head">
+      <div><h2>Mashhur mahsulotlar</h2><p id="productCount">Tanlangan mahsulotlar</p></div>
+      <div class="right">
+        <select class="select" id="sortSelect" onchange="renderProducts()">
+          <option value="popular">Mashhurligi</option><option value="cheap">Arzonidan</option><option value="expensive">Qimmatidan</option><option value="discount">Chegirma</option>
+        </select>
+      </div>
+    </div>
+    <div id="productGrid" class="products"></div>
+  </section>
+
+  <section id="deals">
+    <div class="section-head"><div><h2>Aksiya va maxsus takliflar</h2><p>Chegirmalarni kuzatib boring</p></div></div>
+    <div class="deals">
+      <div class="deal d1"><h3>Elektronika haftaligi</h3><p>Tanlangan mahsulotlarga maxsus narxlar.</p><span class="code">WATT50</span></div>
+      <div class="deal d2"><h3>Aksessuarlar</h3><p>Chegirmali narxlarni katalogdan toping.</p><span class="code">TECH20</span></div>
+      <div class="deal d3"><h3>Yangi foydalanuvchi</h3><p>Akkount ochib, yangiliklardan xabardor bo'ling.</p><span class="code">NEWUSER</span></div>
+    </div>
+  </section>
+
+  <section id="ai" class="ai-card">
+    <div>
+      <h2>🤖 WattAI — xarid yordamchisi</h2>
+      <p>Byudjet, mahsulot turi va foydalanish maqsadingizni yozing. Demo AI yordamchi katalogdagi mahsulotlar bo'yicha tavsiya va taqqoslashni ko'rsatadi.</p>
+      <button class="btn btn-primary" onclick="toggleChat()">AI bilan maslahatlashish</button>
+    </div>
+    <div class="ai-points">
+      <div class="ai-point"><b>🔎 Tanlash</b><span>Mahsulotlarni kategoriya va narx bo'yicha izlash.</span></div>
+      <div class="ai-point"><b>⚖️ Taqqoslash</b><span>Texnik xususiyatlarni yonma-yon ko'rish.</span></div>
+      <div class="ai-point"><b>💰 Byudjet</b><span>Belgilangan narx oralig'ida variantlarni topish.</span></div>
+    </div>
+  </section>
+</main>
+
+<footer id="contact">
+  <div class="footer-grid">
+    <div><h3>WattMarket</h3><p>Zamonaviy elektronika va kundalik mahsulotlar uchun raqamli savdo platformasi.</p><p>📞 +998 90 000 00 00<br>✉️ support@wattmarket.uz</p></div>
+    <div><h4>WattMarket</h4><p><a href="#categories">Katalog</a><br><a href="#products">Mahsulotlar</a><br><a href="#deals">Aksiyalar</a></p></div>
+    <div><h4>Xaridor uchun</h4><p><a href="#" onclick="openModal('deliveryModal');return false">Yetkazib berish</a><br><a href="#" onclick="openModal('paymentModal');return false">To'lov</a><br><a href="#" onclick="openModal('accountModal');return false">Akkount</a></p></div>
+    <div><h4>Yordam</h4><p><a href="#" onclick="toggleChat();return false">AI yordamchi</a><br><a href="#contact">Aloqa</a><br><a href="#" onclick="trackOrder();return false">Buyurtmani kuzatish</a></p></div>
+    <div><h4>Xavfsizlik</h4><p>Karta ma'lumotlari real loyihada to'g'ridan-to'g'ri WattMarket bazasida saqlanmasligi, to'lov provayderining tokenizatsiyasi orqali ishlashi kerak.</p></div>
+  </div>
+  <div class="footer-bottom"><div>© 2026 WattMarket. Barcha huquqlar himoyalangan.</div><div>Elektronika • To'lov • Pochta yetkazib berish • AI</div></div>
+</footer>
+
+<button class="chat-launch" onclick="toggleChat()">🤖</button>
+<div id="chat" class="chat">
+  <div class="chat-head"><div><b>WattAI</b><small>Onlayn xarid yordamchisi</small></div><button class="close" style="background:#ffffff16;color:white" onclick="toggleChat()">×</button></div>
+  <div id="chatBody" class="chat-body">
+    <div class="msg bot">Salom! Men WattAI. Smartfon, noutbuk, aksessuar yoki boshqa mahsulot izlayapsizmi? Byudjetingizni ham yozishingiz mumkin.</div>
+  </div>
+  <div class="chat-input"><input id="chatInput" placeholder="Masalan: 3 mln gacha noutbuk"><button onclick="sendChat()">➤</button></div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<!-- ACCOUNT -->
+<div id="accountModal" class="overlay"><div class="modal">
+  <div class="modal-head"><h2>👤 WattMarket akkaunti</h2><button class="close" onclick="closeModal('accountModal')">×</button></div>
+  <div class="modal-body">
+    <div class="tabs"><button class="tab active" onclick="accountTab('login',this)">Kirish</button><button class="tab" onclick="accountTab('register',this)">Ro'yxatdan o'tish</button></div>
+    <div id="loginForm">
+      <div class="form-grid"><div class="field full"><label>Telefon yoki email</label><input id="loginContact" placeholder="+998 90 000 00 00"></div><div class="field full"><label>Parol</label><input type="password" placeholder="••••••••"></div></div>
+      <button class="btn btn-primary" style="margin-top:15px;width:100%" onclick="demoLogin()">Kirish</button>
+    </div>
+    <div id="registerForm" style="display:none">
+      <div class="form-grid"><div class="field"><label>Ism</label><input id="regName"></div><div class="field"><label>Familiya</label><input></div><div class="field"><label>Telefon</label><input placeholder="+998"></div><div class="field"><label>Email</label><input type="email"></div><div class="field full"><label>Parol</label><input type="password"></div><div class="field full"><label>Yetkazib berish manzili</label><textarea rows="2" placeholder="Viloyat, tuman/shahar, ko'cha, uy, xonadon"></textarea></div></div>
+      <button class="btn btn-primary" style="margin-top:15px;width:100%" onclick="demoRegister()">Akkaunt yaratish</button>
+    </div>
+  </div>
+</div></div>
+
+<!-- CART -->
+<div id="cartModal" class="overlay"><div class="modal">
+  <div class="modal-head"><h2>🛒 Savat</h2><button class="close" onclick="closeModal('cartModal')">×</button></div>
+  <div class="modal-body"><div id="cartItems"></div><div id="cartSummary"></div></div>
+  <div class="modal-foot"><button class="btn btn-outline" onclick="closeModal('cartModal')">Davom etish</button><button class="btn btn-primary" onclick="startCheckout()">Buyurtmani rasmiylashtirish</button></div>
+</div></div>
+
+<!-- CHECKOUT -->
+<div id="checkoutModal" class="overlay"><div class="modal">
+  <div class="modal-head"><h2>📦 Buyurtmani rasmiylashtirish</h2><button class="close" onclick="closeModal('checkoutModal')">×</button></div>
+  <div class="modal-body">
+    <div class="form-grid">
+      <div class="field"><label>Ism va familiya *</label><input id="coName" required></div>
+      <div class="field"><label>Telefon *</label><input id="coPhone" placeholder="+998"></div>
+      <div class="field"><label>Viloyat *</label><select id="coRegion"><option>Tanlang</option><option>Toshkent shahri</option><option>Toshkent viloyati</option><option>Samarqand</option><option>Andijon</option><option>Farg'ona</option><option>Namangan</option><option>Buxoro</option><option>Jizzax</option><option>Qashqadaryo</option><option>Sirdaryo</option><option>Surxondaryo</option><option>Navoiy</option><option>Xorazm</option><option>Qoraqalpog'iston</option></select></div>
+      <div class="field"><label>Tuman / shahar *</label><input id="coCity"></div>
+      <div class="field full"><label>To'liq manzil *</label><textarea id="coAddress" rows="2" placeholder="Ko'cha, uy, xonadon, mo'ljal"></textarea></div>
+      <div class="field"><label>Yetkazib berish</label><select id="coDelivery"><option>Pochta orqali — standart</option><option>Pochta orqali — tezkor</option></select></div>
+      <div class="field"><label>To'lov</label><select id="coPayment" onchange="toggleCardFields()"><option value="card">Bank kartasi</option><option value="cash">Yetkazib berishda to'lash (agar mavjud bo'lsa)</option></select></div>
+    </div>
+    <div id="cardFields" style="margin-top:16px">
+      <div class="form-grid">
+        <div class="field full"><label>Karta raqami *</label><input id="cardNumber" inputmode="numeric" maxlength="19" placeholder="0000 0000 0000 0000"></div>
+        <div class="field"><label>Amal qilish muddati *</label><input id="cardExp" placeholder="MM/YY" maxlength="5"></div>
+        <div class="field"><label>CVV *</label><input id="cardCvv" type="password" inputmode="numeric" maxlength="4" placeholder="•••"></div>
+      </div>
+      <div class="admin-note" style="margin-top:12px">Demo interfeys: bu sahifada real pul yechilmaydi. Ishlab chiqarish tizimida karta rekvizitlari serverda saqlanmasin; Click/Payme/Uzum/Stripe kabi mos provayderning rasmiy checkout/tokenizatsiya mexanizmi ulanadi.</div>
+    </div>
+    <div id="checkoutTotal" class="cart-summary"></div>
+  </div>
+  <div class="modal-foot"><button class="btn btn-outline" onclick="closeModal('checkoutModal')">Bekor qilish</button><button class="btn btn-primary" onclick="placeOrder()">To'lovga o'tish / Buyurtma</button></div>
+</div></div>
+
+<!-- DELIVERY -->
+<div id="deliveryModal" class="overlay"><div class="modal">
+  <div class="modal-head"><h2>🚚 Yetkazib berish</h2><button class="close" onclick="closeModal('deliveryModal')">×</button></div>
+  <div class="modal-body">
+    <h3>Pochta orqali yetkazib berish</h3>
+    <p style="font-size:13px;line-height:1.6;color:#596579">Buyurtma rasmiylashtirishda viloyat, tuman/shahar va to'liq manzil kiritiladi. Yetkazib berish narxi va muddati backenddagi pochta tariflari bilan hisoblanadi.</p>
+    <div class="quick-grid" style="grid-template-columns:1fr 1fr">
+      <div class="quick-card"><div class="qicon">📍</div><div>Manzilni aniq kiriting</div></div>
+      <div class="quick-card"><div class="qicon">📦</div><div>Buyurtma kodi bilan kuzating</div></div>
+    </div>
+  </div>
+</div></div>
+
+<!-- PAYMENT -->
+<div id="paymentModal" class="overlay"><div class="modal">
+  <div class="modal-head"><h2>💳 To'lov usullari</h2><button class="close" onclick="closeModal('paymentModal')">×</button></div>
+  <div class="modal-body">
+    <p style="font-size:13px;line-height:1.6">Platforma uchun karta to'lovi checkout orqali amalga oshiriladi. Real tizimda karta ma'lumotlari WattMarket serverida saqlanmaydi.</p>
+    <div class="categories" style="grid-template-columns:repeat(4,1fr)">
+      <div class="cat"><div class="emoji">💳</div><strong>UZCARD</strong></div>
+      <div class="cat"><div class="emoji">💳</div><strong>HUMO</strong></div>
+      <div class="cat"><div class="emoji">💳</div><strong>VISA</strong></div>
+      <div class="cat"><div class="emoji">💳</div><strong>Mastercard</strong></div>
+    </div>
+  </div>
+</div></div>
+
+<!-- ADMIN hidden -->
+<div id="adminModal" class="overlay"><div class="modal">
+  <div class="modal-head"><h2>⚙️ WattMarket Admin</h2><button class="close" onclick="closeModal('adminModal')">×</button></div>
+  <div class="modal-body">
+    <div class="admin-note">Bu demo admin oynasi yashirin trigger orqali ochiladi. Frontenddagi yashirin login xavfsizlik mexanizmi emas. Real admin uchun server-side authentication, session/JWT, 2FA va role-based access control shart.</div>
+    <div id="adminLogin">
+      <div class="form-grid"><div class="field full"><label>Admin login</label><input id="adminUser" autocomplete="username"></div><div class="field full"><label>Admin parol</label><input id="adminPass" type="password" autocomplete="current-password"></div></div>
+      <button class="btn btn-primary" style="width:100%;margin-top:13px" onclick="adminLogin()">Kirish</button>
+    </div>
+    <div id="adminPanel" style="display:none">
+      <h3>Mahsulot joylash</h3>
+      <div class="form-grid">
+        <div class="field"><label>Mahsulot nomi</label><input id="pName"></div>
+        <div class="field"><label>Kategoriya</label><select id="pCat"><option>Smartfonlar</option><option>Kompyuter</option><option>Audio</option><option>TV</option><option>Aksessuarlar</option><option>Uy texnikasi</option><option>Gaming</option><option>Elektronika</option></select></div>
+        <div class="field"><label>Narx (so'm)</label><input id="pPrice" type="number"></div>
+        <div class="field"><label>Eski narx (so'm)</label><input id="pOld" type="number"></div>
+        <div class="field"><label>Emoji / ikonka</label><input id="pEmoji" value="📦"></div>
+        <div class="field"><label>Rasm URL</label><input id="pImage" placeholder="https://..."></div>
+        <div class="field full"><label>Mahsulot tavsifi</label><textarea id="pDesc" rows="2"></textarea></div>
+      </div>
+      <button class="btn btn-primary" style="margin-top:12px" onclick="addProduct()">+ Mahsulotni joylash</button>
+      <h3 style="margin-top:25px">Joylangan mahsulotlar</h3>
+      <div id="adminProducts" class="admin-products"></div>
+    </div>
+  </div>
+</div></div>
+
+<script>
+/* =========================
+   WATTMARKET SINGLE-FILE DEMO
+   ========================= */
+
+const defaultProducts = [
+ {id:1,name:"Smartfon Pro X 5G",cat:"Smartfonlar",price:3999000,old:4499000,discount:11,emoji:"📱",rating:4.9},
+ {id:2,name:"UltraBook 15 — 16/512 GB",cat:"Kompyuter",price:7299000,old:7999000,discount:9,emoji:"💻",rating:4.8},
+ {id:3,name:"Wireless ANC Headphones",cat:"Audio",price:899000,old:1199000,discount:25,emoji:"🎧",rating:4.7},
+ {id:4,name:"Smart TV 55 4K",cat:"TV",price:5499000,old:6299000,discount:13,emoji:"📺",rating:4.8},
+ {id:5,name:"Mechanical RGB Keyboard",cat:"Aksessuarlar",price:459000,old:599000,discount:23,emoji:"⌨️",rating:4.6},
+ {id:6,name:"Gaming Mouse X7",cat:"Gaming",price:289000,old:349000,discount:17,emoji:"🖱️",rating:4.7},
+ {id:7,name:"Smart Watch Active",cat:"Elektronika",price:699000,old:899000,discount:22,emoji:"⌚",rating:4.5},
+ {id:8,name:"Robot Vacuum Smart",cat:"Uy texnikasi",price:2199000,old:2599000,discount:15,emoji:"🤖",rating:4.6},
+ {id:9,name:"Power Bank 20 000 mAh",cat:"Aksessuarlar",price:329000,old:399000,discount:18,emoji:"🔋",rating:4.8},
+ {id:10,name:"Wi‑Fi 6 Router",cat:"Elektronika",price:579000,old:699000,discount:17,emoji:"📡",rating:4.7}
+];
+
+let products = JSON.parse(localStorage.getItem("watt_products") || "null") || defaultProducts;
+let cart = JSON.parse(localStorage.getItem("watt_cart") || "[]");
+let currentCategory = "";
+
+function money(n){return new Intl.NumberFormat("uz-UZ").format(Math.round(n))+" so'm"}
+function save(){localStorage.setItem("watt_products",JSON.stringify(products));localStorage.setItem("watt_cart",JSON.stringify(cart))}
+function showToast(t){const x=document.getElementById("toast");x.textContent=t;x.classList.remove("show");void x.offsetWidth;x.classList.add("show")}
+
+function renderProducts(){
+  const q=document.getElementById("searchInput").value.toLowerCase().trim();
+  let arr=products.filter(p=>{
+    const text=(p.name+" "+p.cat).toLowerCase();
+    return (!q||text.includes(q)) && (!currentCategory||p.cat===currentCategory);
+  });
+  const sort=document.getElementById("sortSelect").value;
+  if(sort==="cheap")arr.sort((a,b)=>a.price-b.price);
+  if(sort==="expensive")arr.sort((a,b)=>b.price-a.price);
+  if(sort==="discount")arr.sort((a,b)=>(b.discount||0)-(a.discount||0));
+  document.getElementById("productCount").textContent=arr.length+" ta mahsulot ko'rsatilmoqda";
+  document.getElementById("productGrid").innerHTML=arr.map(p=>`
+    <article class="product">
+      <div class="product-img">
+        ${p.discount?`<div class="discount">-${p.discount}%</div>`:""}
+        <button class="fav" onclick="favorite(${p.id})">♡</button>
+        ${p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">`:""}
+        <div class="placeholder" style="${p.image?'display:none':''}">${p.emoji||"📦"}</div>
+      </div>
+      <div class="product-body">
+        <div class="product-title">${escapeHtml(p.name)}</div>
+        <div class="rating">★★★★★ <span>(${p.rating||4.5})</span></div>
+        <div><span class="price">${money(p.price)}</span>${p.old?`<span class="old-price">${money(p.old)}</span>`:""}</div>
+        <div class="installment">✓ Karta orqali to'lash mumkin</div>
+        <button class="add" onclick="addToCart(${p.id})">🛒 Savatga qo'shish</button>
+      </div>
+    </article>`).join("") || `<div style="grid-column:1/-1;background:#fff;padding:35px;border-radius:15px;text-align:center">Mahsulot topilmadi.</div>`;
+}
+
+function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function filterCategory(c){currentCategory=c;document.getElementById("searchInput").value="";renderProducts()}
+function goHome(){currentCategory="";document.getElementById("searchInput").value="";window.scrollTo({top:0,behavior:"smooth"});renderProducts()}
+
+function addToCart(id){
+  const p=products.find(x=>x.id===id);if(!p)return;
+  const item=cart.find(x=>x.id===id);
+  if(item)item.qty++;else cart.push({id,qty:1});
+  save();updateCart();showToast("Mahsulot savatga qo'shildi");
+}
+function updateCart(){
+  const count=cart.reduce((s,x)=>s+x.qty,0);
+  document.getElementById("cartBadge").textContent=count;
+  const box=document.getElementById("cartItems");
+  if(!cart.length){box.innerHTML='<div style="padding:35px;text-align:center;color:#7a8495">Savat hozircha bo\'sh.</div>';document.getElementById("cartSummary").innerHTML="";return}
+  let subtotal=0;
+  box.innerHTML=cart.map(item=>{
+    const p=products.find(x=>x.id===item.id);if(!p)return "";
+    subtotal+=p.price*item.qty;
+    return `<div class="cart-item"><div class="cart-thumb">${p.image?`<img src="${escapeHtml(p.image)}">`:p.emoji}</div><div class="cart-info"><b>${escapeHtml(p.name)}</b><div style="font-size:11px;color:#7b8492">${money(p.price)}</div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><b>${item.qty}</b><button onclick="changeQty(${p.id},1)">+</button><button class="btn btn-danger" style="padding:5px 8px;margin-left:5px" onclick="removeCart(${p.id})">O'chirish</button></div></div></div>`
+  }).join("");
+  const delivery=subtotal>1000000?0:25000;
+  document.getElementById("cartSummary").innerHTML=`<div class="row"><span>Mahsulotlar</span><b>${money(subtotal)}</b></div><div class="row"><span>Pochta</span><b>${delivery?money(delivery):"Bepul"}</b></div><div class="row total"><span>Jami</span><b>${money(subtotal+delivery)}</b></div>`;
+}
+function changeQty(id,n){const x=cart.find(i=>i.id===id);if(!x)return;x.qty+=n;if(x.qty<=0)removeCart(id);else{save();updateCart()}}
+function removeCart(id){cart=cart.filter(x=>x.id!==id);save();updateCart()}
+function favorite(id){showToast("Mahsulot sevimlilarga qo'shildi")}
+
+function openModal(id){document.getElementById(id).classList.add("open");if(id==="cartModal")updateCart()}
+function closeModal(id){document.getElementById(id).classList.remove("open")}
+document.querySelectorAll(".overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o)o.classList.remove("open")}));
+
+function startCheckout(){
+  if(!cart.length){showToast("Avval savatga mahsulot qo'shing");return}
+  closeModal("cartModal");openModal("checkoutModal");renderCheckoutTotal()
+}
+function renderCheckoutTotal(){
+  let subtotal=cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id);return s+(p?p.price*i.qty:0)},0);
+  const delivery=subtotal>1000000?0:25000;
+  document.getElementById("checkoutTotal").innerHTML=`<div class="row"><span>Mahsulotlar</span><b>${money(subtotal)}</b></div><div class="row"><span>Pochta</span><b>${delivery?money(delivery):"Bepul"}</b></div><div class="row total"><span>To'lov summasi</span><b>${money(subtotal+delivery)}</b></div>`;
+}
+function toggleCardFields(){document.getElementById("cardFields").style.display=document.getElementById("coPayment").value==="card"?"block":"none"}
+function placeOrder(){
+  const fields=["coName","coPhone","coCity","coAddress"];
+  if(fields.some(id=>!document.getElementById(id).value.trim()) || document.getElementById("coRegion").value==="Tanlang"){showToast("Iltimos, majburiy manzil ma'lumotlarini to'ldiring");return}
+  if(document.getElementById("coPayment").value==="card"){
+    const num=document.getElementById("cardNumber").value.replace(/\s/g,"");
+    if(num.length<12 || !document.getElementById("cardExp").value || document.getElementById("cardCvv").value.length<3){showToast("Karta ma'lumotlarini to'liq kiriting");return}
+  }
+  const order="WM-"+Date.now().toString().slice(-8);
+  cart=[];save();updateCart();closeModal("checkoutModal");
+  alert("Demo buyurtma yaratildi: "+order+"\\n\\nReal to'lov uchun backend va to'lov provayderi checkout'i ulanishi kerak.");
+}
+function trackOrder(){const n=prompt("Buyurtma raqamini kiriting:");if(n)alert(n+" — demo kuzatuv tizimi. Real status backend API orqali olinadi.")}
+
+function accountTab(type,btn){
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));btn.classList.add("active");
+  document.getElementById("loginForm").style.display=type==="login"?"block":"none";
+  document.getElementById("registerForm").style.display=type==="register"?"block":"none";
+}
+function demoLogin(){showToast("Demo kirish muvaffaqiyatli");closeModal("accountModal")}
+function demoRegister(){showToast("Demo akkaunt yaratildi");closeModal("accountModal")}
+
+function toggleChat(){document.getElementById("chat").classList.toggle("open")}
+function addMsg(text,type){const b=document.getElementById("chatBody");const d=document.createElement("div");d.className="msg "+type;d.textContent=text;b.appendChild(d);b.scrollTop=b.scrollHeight}
+function sendChat(){
+  const i=document.getElementById("chatInput"),q=i.value.trim();if(!q)return;
+  addMsg(q,"user");i.value="";
+  setTimeout(()=>aiReply(q),300);
+}
+document.getElementById("chatInput").addEventListener("keydown",e=>{if(e.key==="Enter")sendChat()});
+function aiReply(q){
+  const l=q.toLowerCase();
+  let found=products.filter(p=>(p.name+" "+p.cat).toLowerCase().includes(l));
+  const nums=l.match(/(\d[\d\s.,]*)\s*(mln|million|ming)?/);
+  if(l.includes("noutbuk")||l.includes("kompyuter"))found=products.filter(p=>p.cat==="Kompyuter");
+  else if(l.includes("telefon")||l.includes("smartfon"))found=products.filter(p=>p.cat==="Smartfonlar");
+  else if(l.includes("quloq")||l.includes("audio"))found=products.filter(p=>p.cat==="Audio");
+  if(nums){
+    let n=parseFloat(nums[1].replace(/[^\d]/g,""));if(l.includes("mln")||l.includes("million"))n*=1000000;
+    found=products.filter(p=>p.price<=n).slice(0,4);
+  }
+  if(found.length){
+    addMsg("Katalogdan mos variantlar: "+found.slice(0,4).map(p=>p.name+" — "+money(p.price)).join(" | "),"bot");
+  }else addMsg("Mahsulot turi yoki byudjetni aniqroq yozing. Masalan: “3 mln gacha smartfon” yoki “1 mln gacha audio”.","bot");
+}
+
+/* Hidden admin trigger:
+   Ctrl + Shift + A or URL #wm-admin
+   This is intentionally not a security boundary. */
+let keyState=false;
+document.addEventListener("keydown",e=>{
+  if(e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==="a"){openModal("adminModal")}
+});
+if(location.hash==="#wm-admin")openModal("adminModal");
+
+function adminLogin(){
+  const u=document.getElementById("adminUser").value,p=document.getElementById("adminPass").value;
+  /* DEMO credentials only. Change/remove before production. */
+  if(u==="admin"&&p==="WattMarket@2026"){
+    document.getElementById("adminLogin").style.display="none";
+    document.getElementById("adminPanel").style.display="block";
+    renderAdminProducts();
+  }else showToast("Admin login yoki parol noto'g'ri");
+}
+function addProduct(){
+  const name=document.getElementById("pName").value.trim(),price=Number(document.getElementById("pPrice").value);
+  if(!name||!price){showToast("Mahsulot nomi va narxini kiriting");return}
+  const old=Number(document.getElementById("pOld").value)||0;
+  const discount=old>price?Math.round((1-price/old)*100):0;
+  products.unshift({id:Date.now(),name,cat:document.getElementById("pCat").value,price,old,discount,emoji:document.getElementById("pEmoji").value||"📦",image:document.getElementById("pImage").value.trim(),desc:document.getElementById("pDesc").value,rating:5});
+  save();renderProducts();renderAdminProducts();showToast("Mahsulot katalogga qo'shildi");
+  ["pName","pPrice","pOld","pImage","pDesc"].forEach(id=>document.getElementById(id).value="");
+}
+function renderAdminProducts(){
+  document.getElementById("adminProducts").innerHTML=products.map(p=>`<div class="admin-row"><div><b>${escapeHtml(p.name)}</b><div style="font-size:10px;color:#778196">${p.cat} • ${money(p.price)}</div></div><button class="btn btn-danger" style="padding:7px 10px" onclick="deleteProduct(${p.id})">O'chirish</button></div>`).join("");
+}
+function deleteProduct(id){products=products.filter(p=>p.id!==id);cart=cart.filter(i=>i.id!==id);save();renderProducts();renderAdminProducts();updateCart()}
+
+document.getElementById("searchInput").addEventListener("input",()=>{currentCategory="";renderProducts()});
+renderProducts();updateCart();
+</script>
+
+<script>
+/* WATTMARKET API BRIDGE
+   Real checkout: customer card is NOT collected.
+   Customer pays the seller's displayed card and uploads a receipt.
+*/
+const WM_API="/api";
+let wmSellerPayment=null;
+async function wmFetch(path,opt={}) {
+  const r=await fetch(WM_API+path,opt), d=await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(d.message||"Server xatosi");
+  return d;
+}
+async function loadWattMarketData(){
+  try{
+    const c=await wmFetch("/public/config");
+    wmSellerPayment=c.sellerPayment;
+  }catch(e){console.warn(e.message)}
+  try{
+    const p=await wmFetch("/products?limit=100");
+    if(p.products?.length){products=p.products;renderProducts()}
+  }catch(e){}
+  try{
+    const a=await wmFetch("/ads/active");
+    if(a.ads?.length) renderServerAds(a.ads);
+  }catch(e){}
+}
+function renderServerAds(ads){
+  const h=document.querySelector(".hero-main"); if(!h)return;
+  const a=ads[0], esc=s=>String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+  h.innerHTML=`<div style="font-size:12px;color:#5de7ff;font-weight:900;letter-spacing:2px">WATTMARKET REKLAMA</div>
+  <h1>${esc(a.title)}</h1><p>${esc(a.description)}</p>
+  <div class="hero-buttons"><a class="btn btn-primary" href="${esc(a.target_url||"#products")}">Batafsil →</a></div>`;
+}
+function sellerCardText(x){return String(x||"").replace(/\D/g,"").replace(/(\d{4})(?=\d)/g,"$1 ").trim()}
+
+async function openReceiptCheckout(){
+  if(!cart.length){showToast("Savat bo'sh");return}
+  closeModal("cartModal"); openModal("checkoutModal");
+  const b=document.querySelector("#checkoutModal .modal-body");
+  let total=cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id);return s+(p?p.price*i.qty:0)},0);
+  const delivery=total>1000000?0:25000;
+  const pay=wmSellerPayment||{bankName:"UZCARD",cardNumber:"0000 0000 0000 0000",holder:"Sotuvchi"};
+  const old=document.getElementById("wmReceiptBox");if(old)old.remove();
+  const box=document.createElement("div");box.id="wmReceiptBox";
+  box.style.cssText="margin-top:15px;background:#f4f8ff;border:1px solid #dce7ff;border-radius:14px;padding:15px";
+  box.innerHTML=`<h3 style="margin:0 0 8px">💳 Sotuvchiga to'lov</h3>
+  <p style="font-size:12px;color:#596579">Mijoz kartasi kiritilmaydi. Bank ilovangizdan quyidagi karta raqamiga to'lov qiling.</p>
+  <div style="background:#fff;border-radius:10px;padding:13px;border:1px solid #e4e9f0">
+  <b>${pay.bankName}</b><br><strong style="font-size:20px">${sellerCardText(pay.cardNumber)}</strong><br>
+  <small>${pay.holder||"Sotuvchi"}</small></div>
+  <div class="field" style="margin-top:12px"><label>To'lov cheki *</label><input id="wmReceipt" type="file" accept="image/*,.pdf"></div>
+  <div class="field" style="margin-top:9px"><label>To'lov izohi</label><input id="wmPaymentNote"></div>
+  <div class="admin-note" style="margin-top:9px">Chek yuborilgach buyurtma “To'lov tekshirilmoqda” holatida bo'ladi.</div>`;
+  b.appendChild(box);
+  const btn=document.querySelector("#checkoutModal .modal-foot .btn-primary");
+  if(btn){btn.textContent="Chekni yuborish";btn.onclick=submitReceiptOrder}
+}
+async function submitReceiptOrder(){
+  const ids=["coName","coPhone","coCity","coAddress"];
+  if(ids.some(x=>!document.getElementById(x)?.value.trim())||document.getElementById("coRegion")?.value==="Tanlang"){showToast("Manzil ma'lumotlarini to'liq kiriting");return}
+  const f=document.getElementById("wmReceipt")?.files?.[0];
+  if(!f){showToast("To'lov chekini yuklang");return}
+  if(f.size>8*1024*1024){showToast("Chek 8 MB dan oshmasin");return}
+  const fd=new FormData();
+  fd.append("customerName",coName.value.trim());fd.append("phone",coPhone.value.trim());
+  fd.append("region",coRegion.value);fd.append("city",coCity.value.trim());fd.append("address",coAddress.value.trim());
+  fd.append("deliveryMethod",coDelivery.value);fd.append("paymentNote",document.getElementById("wmPaymentNote")?.value||"");
+  fd.append("items",JSON.stringify(cart.map(x=>({productId:x.id,qty:x.qty}))));fd.append("receipt",f);
+  try{
+    const d=await wmFetch("/orders",{method:"POST",body:fd});
+    cart=[];save();updateCart();closeModal("checkoutModal");
+    alert("Buyurtma qabul qilindi.\nRaqam: "+d.order.orderNumber+"\nHolat: To'lov tekshirilmoqda");
+  }catch(e){showToast(e.message)}
+}
+async function wmUseMyLocation(){
+  if(!navigator.geolocation){showToast("Geolokatsiya mavjud emas");return}
+  navigator.geolocation.getCurrentPosition(async p=>{
+    try{
+      const d=await wmFetch("/geocode/reverse",{method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({lat:p.coords.latitude,lon:p.coords.longitude})});
+      if(d.address){document.getElementById("coAddress").value=d.address;showToast("Manzil aniqlandi")}
+    }catch(e){showToast("Manzilni aniqlashda xatolik")}
+  },()=>showToast("Joylashuvga ruxsat berilmadi"),{enableHighAccuracy:true,timeout:10000});
+}
+async function wmAdminLoginServer(){
+  try{
+    const d=await wmFetch("/admin/login",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({username:adminUser.value,password:adminPass.value})});
+    sessionStorage.setItem("wm_admin_token",d.token);showToast("Admin tizimiga kirildi");
+  }catch(e){showToast(e.message)}
+}
+window.addEventListener("DOMContentLoaded",loadWattMarketData);
+</script>
+</body>
+</html>

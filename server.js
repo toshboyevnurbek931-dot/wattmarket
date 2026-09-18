@@ -129,8 +129,8 @@ app.post("/api/admin/login", (req, res) => {
   const p = String(req.body.password || "");
   
   // Standart login va parol: admin / admin123 (Render'da .env orqali o'zgartirishingiz mumkin)
-  const adminUser = process.env.ADMIN_USERNAME || "admin";
-  const adminPass = process.env.ADMIN_PASSWORD || "admin123";
+  const adminUser = process.env.ADMIN_USERNAME || "NurbekDev";
+  const adminPass = process.env.ADMIN_PASSWORD || "06160530";
 
   if (u !== adminUser || p !== adminPass) {
     return res.status(401).json({ message: "Login yoki parol noto'g'ri" });

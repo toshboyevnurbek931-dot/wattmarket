@@ -25,8 +25,14 @@ for (const d of ["products", "receipts", "ads"]) {
   fs.mkdirSync(path.join(root, d), { recursive: true });
 }
 
-// Xavfsizlik va sozlamalar
-app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
+// Xavfsizlik va sozlamalar (CSP muammosini oldini olish uchun helmet yumshatildi)
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginResourcePolicy: { policy: "cross-origin" }
+  })
+);
+
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
@@ -121,7 +127,12 @@ app.get("/api/products", (req, res) => {
 app.post("/api/admin/login", (req, res) => {
   const u = String(req.body.username || "");
   const p = String(req.body.password || "");
-  if (u !== (process.env.ADMIN_USERNAME || "admin") || p !== (process.env.ADMIN_PASSWORD || "admin123")) {
+  
+  // Standart login va parol: admin / admin123 (Render'da .env orqali o'zgartirishingiz mumkin)
+  const adminUser = process.env.ADMIN_USERNAME || "admin";
+  const adminPass = process.env.ADMIN_PASSWORD || "admin123";
+
+  if (u !== adminUser || p !== adminPass) {
     return res.status(401).json({ message: "Login yoki parol noto'g'ri" });
   }
   const token = jwt.sign({ role: "admin", username: u }, process.env.JWT_SECRET || "wattmarket_secret_key", { expiresIn: "8h" });
